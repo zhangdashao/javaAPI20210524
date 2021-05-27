@@ -17,6 +17,8 @@ public class JWTInterceptor  implements HandlerInterceptor {
         String token = request.getHeader("token");
         if(StringUtils.isEmpty(token)){
 //            throw new MyException("token不能为空");
+
+            throw new RuntimeException("无token，请重新登录");
         }
         try {
             JWTUtils.verify(token);

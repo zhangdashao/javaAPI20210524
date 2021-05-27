@@ -1,0 +1,24 @@
+#默认使用配置
+spring:
+  profiles:
+    active: dev
+
+#公共配置与profiles选择无关 mapperLocations指的路径是src/main/resources
+#mybatis:
+#  typeAliasesPackage: com.zw.springboot_web.model
+#  mapperLocations: classpath:mapping/*.xml
+#
+
+---
+
+#开发配置
+spring:
+  profiles: dev
+  #  mysql配置
+  datasource:
+    url: jdbc:mysql://localhost:3306/javaapi?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 使用druid数据源
+#    type: com.alibaba.druid.pool.DruidDataSource

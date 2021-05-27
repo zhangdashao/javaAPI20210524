@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 public class User  {
 
     @NotNull(message = "id不能为空")
-    private Integer id;
+    private String id;
 
     @NotBlank(message="姓名不能为空")
     @Length(min = 2, max = 4, message = "name 姓名长度必须在 {min} - {max} 之间")
@@ -25,6 +25,9 @@ public class User  {
     @NotBlank(message="密码不能为空")
     @Length(min = 5, max = 10, message = "password 密码长度必须在 {min} - {max} 之间")
     private String password;
+
+    private Integer age;
+    private String email;
 
 }
 

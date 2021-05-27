@@ -27,7 +27,7 @@ public class UserLoginController {
         return "登录失败！账号或者密码不对！";
     }
 
-    @GetMapping("test")
+    @GetMapping("/test")
     public String test()  {
         return "访问test - API";
     }
