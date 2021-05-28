@@ -1,7 +1,10 @@
 package com.zw.javaapi.Controller;
 
 
+
+import com.zw.javaapi.Entity.DescribeException;
 import com.zw.javaapi.Entity.User;
+import com.zw.javaapi.Enum.UserLoginToken;
 import com.zw.javaapi.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,13 +24,14 @@ public class TestController {
     private  com.zw.javaapi.Service.UserService UserService;
 
     @RequestMapping("/ceshi")
+    @UserLoginToken
     public User shouye(Model model){
         List<User>userlist=new ArrayList<>();
         try {
-            userlist=UserService.UserService();
+            userlist=UserService.UserService(null,null,null);
 
         }catch (Exception e){
-
+            throw new DescribeException("无token，请重新登录！",200);
         }
         return userlist.get(0);
     }

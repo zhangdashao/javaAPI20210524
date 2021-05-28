@@ -1,30 +1,45 @@
 package com.zw.javaapi.Controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zw.javaapi.Entity.User;
+import com.zw.javaapi.Service.UserService;
 import com.zw.javaapi.Utils.JWTUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("user")
-public class UserLoginController {
-    @Value("admin")
-    private String realUsername;
+import java.util.List;
 
-    @Value("admin")
-    private String realPassword;
+import static com.zw.javaapi.Utils.JWTUtils.getToken;
+
+@RestController
+@RequestMapping("/user")
+public class UserLoginController {
+
+    @Autowired
+    private com.zw.javaapi.Service.UserService UserService;
 
     @RequestMapping ("/ceshi")
-    public String login(String username, String password) {
-        if (username.equals(realUsername) && password.equals(realPassword)) {
-            User u = new User();
-            u.setPassword(password);
-            u.setUsername(username);
-            return JWTUtils.getToken(u);
+    public JSONObject login(String username, String password) {
+        JSONObject jsonObject=new JSONObject();
+        List<User> userForBase=UserService.UserService(null,username,password);
+        if(userForBase!=null&&userForBase.size()>0){
+
+
+            String token = getToken(userForBase.get(0));
+            jsonObject.put("token", token);
+            jsonObject.put("user", userForBase);
+            return jsonObject;
+
+
+        }else{
+            jsonObject.put("message","登录失败,用户不存在");
+            return jsonObject;
         }
-        return "登录失败！账号或者密码不对！";
+
+
     }
 
     @GetMapping("/test")

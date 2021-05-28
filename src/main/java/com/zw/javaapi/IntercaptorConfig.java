@@ -1,6 +1,6 @@
 package com.zw.javaapi;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.zw.javaapi.Service.JWTInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
