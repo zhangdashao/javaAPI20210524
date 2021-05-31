@@ -15,18 +15,19 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.util.List;
 
 
-
 @Configuration
-public class JWTInterceptor  implements HandlerInterceptor {
+public class JWTInterceptor implements HandlerInterceptor {
+
 
     @Autowired
-    private com.zw.javaapi.Service.UserService UserService;
+    UserService userService;
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object object) throws Exception {
@@ -56,14 +57,19 @@ public class JWTInterceptor  implements HandlerInterceptor {
                 // 获取 token 中的 user id
                 String userId;
                 try {
-                    userId = JWT.decode(token).getClaims().get("userId").asString();
+                    userId = JWT.decode(token).getAudience().get(0);
                 } catch (JWTDecodeException j) {
 //                    throw new RuntimeException("401");
                     throw new DescribeException("系统错误，无法获取用户！",401);
                 }
 
-                //查询用户
-                List<User> userForBase=UserService.UserService(userId,null,null);
+                if (userService == null) {//解决service为null无法注入问题
+                    System.out.println("loginTickerService is null!!!");
+                    BeanFactory factory = WebApplicationContextUtils.getRequiredWebApplicationContext(httpServletRequest.getServletContext());
+                    userService = factory.getBean(UserService.class);
+                }
+
+                List<User> userForBase=userService.UserService(userId,null,null);
 
                 if(userForBase!=null&&userForBase.size()>0){
 

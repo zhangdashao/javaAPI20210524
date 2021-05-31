@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 @Service
 public class UserService {
     @Autowired
@@ -17,7 +19,7 @@ public class UserService {
     public List<User> UserService(String user_id,String username,String password){
         List<User>userlist=new ArrayList<>();
         try {
-            String sql="select * from user";
+            String sql="select * from user where 1=1 ";
             if(user_id!=null&&!user_id.isEmpty()){
                 sql+=" and id='"+user_id+"'";
             }
