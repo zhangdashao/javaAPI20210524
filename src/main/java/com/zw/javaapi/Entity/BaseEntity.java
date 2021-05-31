@@ -1,8 +1,9 @@
 package com.zw.javaapi.Entity;
 
 
-import com.sun.istack.internal.NotNull;
 import lombok.Data;
+
+import javax.validation.constraints.NotNull;
 
 @Data
 public class BaseEntity {

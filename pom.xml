@@ -55,6 +55,7 @@
         </dependency>
 
 
+<!--        校验机制-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
@@ -116,7 +117,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.5.0</version>
+<!--                <version>2.5.0</version>-->
             </plugin>
 <!--            <plugin>-->
 <!--                <groupId>org.springframework.boot</groupId>-->
@@ -127,6 +128,14 @@
 <!--                    &lt;!&ndash; 如果没有该项配置，肯呢个devtools不会起作用，即应用不会restart &ndash;&gt;-->
 <!--                </configuration>-->
 <!--            </plugin>-->
+
+            <!--在这里修改版本-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.4.3</version>
+            </plugin>
+
         </plugins>
     </build>
 

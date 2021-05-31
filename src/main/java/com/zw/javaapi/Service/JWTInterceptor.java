@@ -8,6 +8,7 @@ import com.zw.javaapi.Entity.DescribeException;
 import com.zw.javaapi.Entity.User;
 import com.zw.javaapi.Enum.PassToken;
 import com.zw.javaapi.Enum.UserLoginToken;
+import com.zw.javaapi.Utils.JWTUtils;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -22,12 +23,16 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 
+
 @Configuration
 public class JWTInterceptor implements HandlerInterceptor {
 
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    com.zw.javaapi.Utils.JWTUtils JWTUtils;
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object object) throws Exception {
@@ -57,26 +62,33 @@ public class JWTInterceptor implements HandlerInterceptor {
                 // 获取 token 中的 user id
                 String userId;
                 try {
-                    userId = JWT.decode(token).getAudience().get(0);
+//                    userId = JWT.decode(token).getAudience().get(0);
+                    userId= JWT.decode(token).getId();
                 } catch (JWTDecodeException j) {
 //                    throw new RuntimeException("401");
                     throw new DescribeException("系统错误，无法获取用户！",401);
                 }
 
-                if (userService == null) {//解决service为null无法注入问题
+                //解决service为null无法注入问题
+                if (userService == null) {
                     System.out.println("loginTickerService is null!!!");
                     BeanFactory factory = WebApplicationContextUtils.getRequiredWebApplicationContext(httpServletRequest.getServletContext());
                     userService = factory.getBean(UserService.class);
                 }
 
+
                 List<User> userForBase=userService.UserService(userId,null,null);
 
                 if(userForBase!=null&&userForBase.size()>0){
 
-                    // 验证 token
-                    JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(userForBase.get(0).getPassword())).build();
                     try {
-                        jwtVerifier.verify(token);
+                        if (JWTUtils == null) {
+                            System.out.println("loginTickerService is null!!!");
+                            BeanFactory factory = WebApplicationContextUtils.getRequiredWebApplicationContext(httpServletRequest.getServletContext());
+                            JWTUtils = factory.getBean(JWTUtils.class);
+                        }
+
+                        JWTUtils.verify(token,"a1g2y47dg3dj59fjhhsd7cnewy73j");
                     } catch (JWTVerificationException e) {
 //                        throw new RuntimeException("401");
                         throw new DescribeException("系统错误，无法验证用户！",401);
